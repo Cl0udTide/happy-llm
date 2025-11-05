@@ -160,3 +160,8 @@ cython_debug/
 #.idea/
 .DS_Store
 .obsidian
+
+# my_experiments
+my_experiments/1_tokenizer_training/belle_data_0.5M/
+my_experiments/1_tokenizer_training/my_tokenizer/
+my_experiments/**/*.pth
