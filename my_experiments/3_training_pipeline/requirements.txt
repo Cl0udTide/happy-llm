@@ -1,0 +1,16 @@
+# 核心库
+torch
+torchvision
+
+# Hugging Face
+transformers
+datasets
+tokenizers
+sentencepiece
+
+# 实验跟踪与可视化
+swanlab
+
+# 辅助库
+numpy
+jinja2
