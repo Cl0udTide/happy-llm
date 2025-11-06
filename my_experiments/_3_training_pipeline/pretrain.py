@@ -12,7 +12,7 @@ from contextlib import nullcontext
 
 from transformers import AutoTokenizer
 
-from .._2_llama_implementation.model import Transformer, ModelConfig
+from model import Transformer, ModelConfig
 from dataset import PretrainDataset
 
 import swanlab
