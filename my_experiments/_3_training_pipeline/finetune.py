@@ -269,7 +269,7 @@ if __name__ == "__main__":
         # 注意：使用前需要先登录 swanlab.login(api_key='your key')
         run = swanlab.init(
             project="Happy-LLM",  # 项目名称
-            experiment_name="Pretrain",  # 实验名称
+            experiment_name="SFT",  # 实验名称
             config=args,  # 保存所有超参数
         )
 
