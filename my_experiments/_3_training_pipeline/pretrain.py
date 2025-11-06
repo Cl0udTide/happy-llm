@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import os
 import platform
 import argparse
@@ -142,7 +141,9 @@ def train_epoch(epoch):
             if args.use_swanlab:
                 swanlab.log({
                     "loss": loss.item() * args.accumulation_steps,
-                    "lr": optimizer.param_groups[-1]['lr']
+                    "lr": optimizer.param_groups[-1]['lr'],
+                    "epoch": epoch,
+                    "step": epoch * iter_per_epoch + step
                 })
 
         # 每save_interval步保存一次模型
@@ -261,15 +262,19 @@ if __name__ == "__main__":
         # 注意：使用前需要先登录 swanlab.login(api_key='your key')
         run = swanlab.init(
             project="Happy-LLM",  # 项目名称
-            experiment_name="Pretrain-215M",  # 实验名称
+            experiment_name="Pretrain",  # 实验名称
             config=args,  # 保存所有超参数
         )
 
     # ==================== 模型配置 ====================
     # 定义语言模型的配置参数
     lm_config = ModelConfig(
-        dim=1024,      # 模型维度
-        n_layers=18,   # Transformer层数
+        dim=256,              # 模型维度
+        n_layers=4,           # Transformer层数
+        n_heads=4,            # 注意力头数
+        n_kv_heads=2,         # GQA
+        vocab_size=8192,      # 与 tokenizer 的词表大小一致
+        max_seq_len=256,      # 最大序列长度
     )
 
     # ==================== 训练环境设置 ====================
