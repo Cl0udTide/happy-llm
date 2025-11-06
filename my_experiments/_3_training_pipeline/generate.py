@@ -82,7 +82,7 @@ def generate_text(
     # --- 5. 解码并打印结果 ---
     generated_text = tokenizer.decode(generated_ids[0], skip_special_tokens=True)
     
-    print("\n--- 完整输出 (包含Prompt) ---")
+    print("\n--- 模型输出 ---")
     print(generated_text)
     
 
