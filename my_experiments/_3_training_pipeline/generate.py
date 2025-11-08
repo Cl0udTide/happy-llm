@@ -42,11 +42,11 @@ def generate_text(
     # --- 1. 定义固定模型配置 ---
     lm_config = ModelConfig(
         dim=256,
-        n_layers=4,
+        n_layers=12,         # 相对较深，以增强学习能力
         n_heads=4,
         n_kv_heads=2,
-        vocab_size=8192,
-        max_seq_len=256,
+        vocab_size=6144,     # 假设
+        max_seq_len=1024,    # 维基百科数据可以尝试更长的序列
     )
     print("--- 使用固定的模型配置 ---")
 
