@@ -165,3 +165,6 @@ cython_debug/
 my_experiments/_1_tokenizer_training/belle_data_0.5M/
 my_experiments/_1_tokenizer_training/my_tokenizer/
 my_experiments/**/*.pth
+my_experiments/_4_finetune_poet/LFM2-1.2B/
+my_experiments/_4_finetune_poet/outputs/
+my_experiments/_4_finetune_poet/p5-4.txt
