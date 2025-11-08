@@ -269,12 +269,12 @@ if __name__ == "__main__":
     # ==================== 模型配置 ====================
     # 定义语言模型的配置参数
     lm_config = ModelConfig(
-        dim=256,              # 模型维度
-        n_layers=4,           # Transformer层数
-        n_heads=4,            # 注意力头数
-        n_kv_heads=2,         # GQA
-        vocab_size=8192,      # 与 tokenizer 的词表大小一致
-        max_seq_len=256,      # 最大序列长度
+        dim=256,
+        n_layers=12,         # 相对较深，以增强学习能力
+        n_heads=4,
+        n_kv_heads=2,
+        vocab_size=6144,     # 假设
+        max_seq_len=1024,    # 维基百科数据可以尝试更长的序列
     )
 
     # ==================== 训练环境设置 ====================
