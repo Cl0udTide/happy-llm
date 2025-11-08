@@ -156,7 +156,18 @@ def train_epoch(epoch):
             state_dict = model.module.state_dict() if isinstance(model, torch.nn.DataParallel) else model.state_dict()
             torch.save(state_dict, ckp)
             model.train()  # 切换回训练模式
-                    
+        
+        # 每20000步保存一个带步数标记的检查点
+        if (step + 1) % 20000 == 0:
+            model.eval()
+            # 构建带步数的检查点文件名
+            ckp = f'{args.save_dir}/pretrain_{lm_config.dim}_{lm_config.n_layers}_{lm_config.vocab_size}_step{step+1}.pth'
+
+            # 保存模型状态字典
+            state_dict = model.module.state_dict() if isinstance(model, torch.nn.DataParallel) else model.state_dict()
+            torch.save(state_dict, ckp)
+            model.train()
+
 
 def init_model():
     """
@@ -265,12 +276,12 @@ if __name__ == "__main__":
     # ==================== 模型配置 ====================
     # 定义语言模型的配置参数
     lm_config = ModelConfig(
-        dim=256,
-        n_layers=12,         # 相对较深，以增强学习能力
-        n_heads=4,
-        n_kv_heads=2,
-        vocab_size=6144,     # 假设
-        max_seq_len=1024,    # 维基百科数据可以尝试更长的序列
+        dim=256,              # 模型维度
+        n_layers=4,           # Transformer层数
+        n_heads=4,            # 注意力头数
+        n_kv_heads=2,         # GQA
+        vocab_size=8192,      # 与 tokenizer 的词表大小一致
+        max_seq_len=256,      # 最大序列长度
     )
 
     # ==================== 训练环境设置 ====================
@@ -322,10 +333,3 @@ if __name__ == "__main__":
     # 开始训练循环
     for epoch in range(args.epochs):
         train_epoch(epoch)
-
-    print("\n--- 训练循环结束，正在保存最终模型... ---")
-    model.eval()
-    final_ckp_path = f'{args.save_dir}/pretrain_{lm_config.dim}_{lm_config.n_layers}_{lm_config.vocab_size}.pth'
-    final_state_dict = model.module.state_dict() if isinstance(model, torch.nn.DataParallel) else model.state_dict()
-    torch.save(final_state_dict, final_ckp_path)
-    print(f"--- 最终模型已成功保存到: {final_ckp_path} ---\n")
