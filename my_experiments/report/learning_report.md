@@ -14,7 +14,7 @@
 
 模型整体由以下几个核心部分组成：
 
-![974983b2-3198-44f5-9d4b-1fd134d07a48](974983b2-3198-44f5-9d4b-1fd134d07a48.png)
+<p align="center">   <img src="974983b2-3198-44f5-9d4b-1fd134d07a48.png" alt="MOdel"> </p>
 
 *   **词嵌入层 (Embedding)**: 将来自分词器的 Token ID 序列映射为高维度的向量表示。
 *   **Decoder Layers**: 由多个 `DecoderLayer` 堆叠而成。每个`DecoderLayer`包含**多头注意力**和**前馈神经网络**两个模块
@@ -213,12 +213,12 @@ def __getitem__(self, index: int):
 **预训练 (Pre-training):**
 使用随机初始化的模型在维基百科子集上进行训练。从Loss曲线上看，初始Loss值很高（约9.0），符合随机状态。随后Loss曲线呈现出清晰且持续的下降趋势，表明模型正在从数据中学习语言的基本模式。
 
-![Pretrain](Pretrain.png)
+<p align="center">   <img src="Pretrain.png" alt="Pretrain"> </p>
 
 **监督微调 (Supervised Fine-Tuning, SFT):**
 加载预训练好的权重，在Alpaca指令数据集上进行微调。SFT阶段的初始Loss较低（约5.1），因为模型已具备了预训练阶段学到的基础能力。整个下降过程相对平缓并伴有波动，符合模型从文本续写向指令遵循的方向进行调整的规律。
 
-![SFT](SFT.png)
+<p align="center">   <img src="SFT.png" alt="SFT"> </p>
 
 #### 2. 生成结果
 
@@ -287,9 +287,9 @@ def preprocess_function(example):
 
 1. **初版尝试：** 最初，我我直接将单行四句的诗歌作为模型回答。结果发现，模型在生成时常常只输出两句就提前终止。分析原因可能是源于模型的**预训练惯性**，即在海量数据中，单行文本内的句号“。”后紧跟结束符（EOS）的概率很高，而仅靠微调难以完全扭转这一强大先验。
 
-2. **结构修正：**为了解决提前终止的问题，我调整了数据格式，将一首诗拆分为四行，并只在最后一行的末尾显式添加 `tokenizer.eos_token`，向模型清晰地界定了一首古诗的结构边界，有效解决了生成不完整的问题。
+2. **结构修正：** 为了解决提前终止的问题，我调整了数据格式，将一首诗拆分为四行，并只在最后一行的末尾显式添加 `tokenizer.eos_token`，向模型清晰地界定了一首古诗的结构边界，有效解决了生成不完整的问题。
 
-3. **风格优化：**在第二版的基础上，我进一步优化了 `system` 角色的提示词，将原本的 `You are a helpful assistant trained by Liquid AI. ` 修改为 `你是一位才华横溢的中国古代诗人`。通过赋予模型一个更明确的人设，引导其生成更具古风韵味的文本，最终略微提高了模型的表现。
+3. **风格优化：** 在第二版的基础上，我进一步优化了 `system` 角色的提示词，将原本的 `You are a helpful assistant trained by Liquid AI. ` 修改为 `你是一位才华横溢的中国古代诗人`。通过赋予模型一个更明确的人设，引导其生成更具古风韵味的文本，最终略微提高了模型的表现。
 
    最终的数据格式示例如下：
 
@@ -391,7 +391,7 @@ trainer.train()
 
 模型在所有 17521 首五言绝句上训练了 3 个 Epoch。通过 SwanLab 追踪的训练曲线可以看出，Loss 从初始的约 5.2 稳步下降并收敛至 1.8 左右，整个过程平滑，说明模型在诗歌数据上进行了有效的学习。
 
-![LoRA](E:\资料\课程资料\大三上\happy-llm\my_experiments\report\LoRA.png)
+<p align="center">   <img src="LoRA.png" alt="LoRA"> </p>
 
 #### 2. 微调结果
 
