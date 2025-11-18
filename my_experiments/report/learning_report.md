@@ -160,7 +160,7 @@ def __getitem__(self, index: int):
 
 #### 2.2.2 SFT 数据处理 (`SFTDataset`)
 
-为了处理 **指令遵循**任务，需要通过 `loss_mask` 精确控制模型只在“回答”部分学习。
+处理 **指令遵循** 任务，其核心在于通过 `loss_mask` 精确控制模型只在“回答”部分学习。
 
 ```python
 # dataset.py: SFTDataset
