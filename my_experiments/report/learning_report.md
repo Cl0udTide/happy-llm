@@ -90,6 +90,27 @@ def forward(self, x: torch.Tensor, freqs_cos: torch.Tensor, freqs_sin: torch.Ten
 
 ### 2.2 实验适配
 
+受限于实验环境（Google Colab T4 GPU，约 15GB 显存），教程中即便是“小型”的八千万参数模型也无法直接进行训练。因此，为了能在有限的硬件资源下完整地跑通预训练和SFT的全流程，我对模型参数和训练数据都进行了相应的调整。
+
+**1. 模型参数调整**
+
+为了显著降低显存占用，我大幅度调低了模型的各项核心参数。具体的配置是在**训练脚本（`pretrain.py` 和 `finetune.py`）中**通过实例化一个 `ModelConfig` 对象（命名为 `lm_config`）来定义的，而非直接修改 `model.py` 中的默认值。主要调整如下：
+
+*   **模型维度 (dim)**: 从 1024 降至 256
+*   **层数 (n_layers)**: 从 18 降至 4
+*   **注意力头数 (n_heads)**: 从 16 降至 4
+*   **词汇表大小 (vocab_size)**: 设定为 8192 (与我训练的 tokenizer 保持一致)
+*   **最大序列长度 (max_seq_len)**: 从 512 降至 256
+
+通过这些调整，最终将模型参数量控制在了约 **500 万**，确保了在 T4 GPU 上可以顺利进行训练。
+
+**2. 数据集选择与处理**
+
+考虑到从零开始训练 tokenizer 和模型的成本，我选择了两个公开、高质量的中文数据集，并各取了一部分子集用于本次实验。
+
+*   **预训练数据集**: 我选择了 [**pleisto/wikipedia-cn-20230720-filtered**](https://huggingface.co/datasets/pleisto/wikipedia-cn-20230720-filtered)，这是一个经过清洗的中文维基百科数据集。它包含大量高质量的陈述性文本，非常适合用于让模型学习语言结构、语法和世界知识。
+*   **SFT 数据集**: 我选择了 [**c-s-ale/alpaca-gpt4-data-zh**](https://huggingface.co/datasets/c-s-ale/alpaca-gpt4-data-zh)，这是一个包含由 GPT-4 生成的中文指令微调数据集。其“指令-回答”的格式非常适合用于教会模型如何遵循人类指令进行对话。
+
 为了将这两个数据集适配到我们的模型训练流程中，我分别在 `dataset.py` 中实现了 `PretrainDataset` 和 `SFTDataset` 类。其核心的数据处理流程体现在各自的 `__getitem__` 方法中。
 
 #### 2.2.1 预训练数据处理 (`PretrainDataset`)
